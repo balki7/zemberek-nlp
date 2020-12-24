@@ -14,18 +14,12 @@
     <module>core</module>
     <module>morphology</module>
     <module>tokenization</module>
-    <module>lm</module>
     <module>all</module>
-    <module>experiment</module>
     <module>lang-id</module>
     <module>grpc</module>
     <!-- disable server modules for the time being.-->
     <!--<module>server</module>-->
     <module>normalization</module>
-    <module>examples</module>
-    <module>ner</module>
-    <module>apps</module>
-    <module>classification</module>
   </modules>
 
   <distributionManagement>
