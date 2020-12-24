@@ -17,6 +17,7 @@
     <module>all</module>
     <module>lang-id</module>
     <module>grpc</module>
+    <module>lm</module>
     <!-- disable server modules for the time being.-->
     <!--<module>server</module>-->
     <module>normalization</module>
