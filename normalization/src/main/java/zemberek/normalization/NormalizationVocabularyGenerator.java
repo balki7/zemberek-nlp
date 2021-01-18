@@ -42,33 +42,6 @@ public class NormalizationVocabularyGenerator {
     this.normalize = normalize;
   }
 
-  public static void main(String[] args) throws Exception {
-
-    TurkishMorphology morphology = getTurkishMorphology();
-
-    NormalizationVocabularyGenerator generator = new NormalizationVocabularyGenerator(morphology);
-
-    Path corporaRoot = Paths.get("/home/aaa/data/normalization/corpus");
-    Path outRoot = Paths.get("/home/aaa/data/normalization/vocab-clean");
-    Path rootList = corporaRoot.resolve("clean-list");
-
-    BlockTextLoader corpusProvider = BlockTextLoader
-        .fromDirectoryRoot(corporaRoot, rootList, 30_000);
-
-    Files.createDirectories(outRoot);
-
-    // create vocabularies
-    int threadCount = Runtime.getRuntime().availableProcessors() / 2;
-    if (threadCount > 22) {
-      threadCount = 22;
-    }
-
-    generator.createVocabulary(
-        corpusProvider,
-        threadCount,
-        outRoot);
-  }
-
   static TurkishMorphology getTurkishMorphology() throws IOException {
     return getTurkishMorphology(false);
   }

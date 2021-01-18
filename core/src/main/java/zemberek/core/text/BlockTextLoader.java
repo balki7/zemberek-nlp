@@ -58,25 +58,6 @@ public class BlockTextLoader implements Iterable<TextChunk> {
     return new BlockTextLoader(Collections.singletonList(corpus), blockSize);
   }
 
-  public static BlockTextLoader fromDirectoryRoot(
-      Path corporaRoot,
-      Path folderListFile,
-      int blockSize) throws IOException {
-    List<String> rootNames = TextIO.loadLines(folderListFile, "#");
-    List<Path> roots = new ArrayList<>();
-    rootNames.forEach(s -> roots.add(corporaRoot.resolve(s)));
-
-    List<Path> corpora = new ArrayList<>();
-    for (Path corpusRoot : roots) {
-      corpora.addAll(Files.walk(corpusRoot, 1)
-          .filter(s -> s.toFile().isFile())
-          .collect(Collectors.toList()));
-    }
-    corpora.sort(Comparator.comparing(a -> a.toFile().getAbsolutePath()));
-    Log.info("There are %d corpus files.", corpora.size());
-    return new BlockTextLoader(corpora, blockSize);
-  }
-
   @Override
   public Iterator<TextChunk> iterator() {
     return new CorpusLinesIterator(new ArrayDeque<>(corpusPaths));

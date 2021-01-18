@@ -106,42 +106,6 @@ public class NoisyWordsLexiconGenerator {
     this.threadCount = threadCount;
   }
 
-  public static void main(String[] args) throws Exception {
-
-    int threadCount = Runtime.getRuntime().availableProcessors() / 2;
-    if (threadCount > 22) {
-      threadCount = 22;
-    }
-
-    Path corporaRoot = Paths.get("/home/aaa/data/normalization/corpus");
-    Path workDir = Paths.get("/home/aaa/data/normalization/test-large");
-    Path corpusDirList = corporaRoot.resolve("all-list");
-
-    Files.createDirectories(workDir);
-
-    Path correct = workDir.resolve("correct");
-    Path incorrect = workDir.resolve("incorrect");
-    Path maybeIncorrect = workDir.resolve("possibly-incorrect");
-
-    NormalizationVocabulary vocabulary = new NormalizationVocabulary(
-        correct, incorrect, maybeIncorrect, 1, 3, 1);
-
-    NoisyWordsLexiconGenerator generator = new NoisyWordsLexiconGenerator(vocabulary, threadCount);
-
-    BlockTextLoader corpusProvider = BlockTextLoader
-        .fromDirectoryRoot(corporaRoot, corpusDirList, 50_000);
-
-    // create graph
-    Path graphPath = workDir.resolve("graph");
-    generator.createGraph(corpusProvider, graphPath);
-
-    Histogram<String> incorrectWords = Histogram.loadFromUtf8File(incorrect, ' ');
-    incorrectWords.add(Histogram.loadFromUtf8File(maybeIncorrect, ' '));
-    generator.createCandidates(graphPath, workDir, incorrectWords);
-
-    Log.info("Done");
-  }
-
   void createCandidates(Path graphPath, Path outRoot, Histogram<String> noisyWords)
       throws Exception {
     Stopwatch sw = Stopwatch.createStarted();

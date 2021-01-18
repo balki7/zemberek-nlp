@@ -28,38 +28,6 @@ public class ProcessNormalizationCorpus {
     this.normalizer = normalizer;
   }
 
-  public static void main(String[] args) throws Exception {
-    TurkishMorphology morphology = getTurkishMorphology();
-
-    Path normalizationDataRoot =
-        Paths.get("/home/aaa/data/normalization/test-large");
-    Path lmPath = Paths.get("/home/aaa/data/normalization/lm.slm");
-
-    TurkishSentenceNormalizer normalizationPreprocessor = new TurkishSentenceNormalizer(
-        morphology, normalizationDataRoot, lmPath);
-
-    ProcessNormalizationCorpus processor = new ProcessNormalizationCorpus(normalizationPreprocessor);
-
-    Path corporaRoot = Paths.get("/home/aaa/data/corpora");
-    Path outRoot = Paths.get("/home/aaa/data/normalization/corpus/clean");
-    Path rootList = corporaRoot.resolve("clean-list");
-
-    Files.createDirectories(outRoot);
-
-    BlockTextLoader corpusProvider = BlockTextLoader
-        .fromDirectoryRoot(corporaRoot, rootList, BLOCK_SIZE);
-
-    // create vocabularies
-    int threadCount = Runtime.getRuntime().availableProcessors() / 2;
-    if (threadCount > 10) {
-      threadCount = 10;
-    }
-
-    processor.process(corpusProvider, threadCount, outRoot);
-    Log.info("Done.");
-
-  }
-
   void process(
       BlockTextLoader corpusProvider,
       int threadCount,
