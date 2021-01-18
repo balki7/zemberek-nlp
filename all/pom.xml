@@ -72,11 +72,6 @@
     </dependency>
     <dependency>
       <groupId>zemberek-nlp</groupId>
-      <artifactId>zemberek-apps</artifactId>
-      <version>${project.parent.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>zemberek-nlp</groupId>
       <artifactId>zemberek-tokenization</artifactId>
       <version>${project.parent.version}</version>
     </dependency>
@@ -92,11 +87,6 @@
     </dependency>
     <dependency>
       <groupId>zemberek-nlp</groupId>
-      <artifactId>zemberek-ner</artifactId>
-      <version>${project.parent.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>zemberek-nlp</groupId>
       <artifactId>zemberek-lang-id</artifactId>
       <version>${project.parent.version}</version>
     </dependency>
@@ -104,11 +94,6 @@
       <groupId>zemberek-nlp</groupId>
       <artifactId>zemberek-grpc-server</artifactId>
       <version>0.3.0</version>
-    </dependency>
-    <dependency>
-      <groupId>zemberek-nlp</groupId>
-      <artifactId>zemberek-classification</artifactId>
-      <version>${project.parent.version}</version>
     </dependency>
   </dependencies>
 

@@ -133,28 +133,8 @@ public final class Log {
    * @param params if message is formatted according to String.format() params should contain
    * necessary arguments. If last parameter is a throwable, it is handled specially.
    */
-  public static void trace(String message, Object... params) {
-    log(Level.FINER, message, params);
-  }
-
-  public static void trace(boolean condition, String message, Object... params) {
-    if (condition) {
-      log(Level.FINER, message, params);
-    }
-  }
-
-  public static void trace(Object object) {
-    log(Level.FINER, object.toString());
-  }
-
   public static void debug(String message, Object... params) {
     log(Level.FINE, message, params);
-  }
-
-  public static void debug(boolean condition, String message, Object... params) {
-    if (condition) {
-      log(Level.FINE, message, params);
-    }
   }
 
   public static void debug(Object object) {
@@ -211,57 +191,11 @@ public final class Log {
     log(Level.SEVERE, object.toString());
   }
 
-  public static void setError() {
-    setLevel(Level.SEVERE);
-  }
-
-  public static void setWarn() {
-    setLevel(Level.WARNING);
-  }
-
-  public static void setInfo() {
-    setLevel(Level.INFO);
-  }
-
-  public static void setDebug() {
-    setLevel(Level.FINE);
-  }
-
-  public static void setTrace() {
-    setLevel(Level.FINER);
-  }
-
-  public static void addFileHandler(Path path) throws IOException {
-
-    if (fileHandlers.containsKey(path.toFile())) {
-      Log.info("Log File %s already exist. Appending.", path.toFile());
-      return;
-    }
-
-    final FileHandler handler = new FileHandler(path.toFile().getAbsolutePath(), true);
-    handler.setFormatter(formatter);
-    handler.setLevel(currentLevel);
-    logger.addHandler(handler);
-    fileHandlers.put(path.toFile(), handler);
-  }
-
-  public static void flushFileHandlers() {
-    fileHandlers.values().stream().filter(Objects::nonNull).forEach(Handler::flush);
-  }
-
   public static void removeFileHandler(File file) {
     if (fileHandlers.containsKey(file)) {
       FileHandler handler = fileHandlers.remove(file);
       logger.removeHandler(handler);
     }
-  }
-
-  public static void removeFileHandler(Path path) {
-    removeFileHandler(path.toFile());
-  }
-
-  public static List<Path> getCurrentLogFiles() {
-    return fileHandlers.keySet().stream().map(File::toPath).collect(Collectors.toList());
   }
 
   public static synchronized void log(Level level, String message, Object... params) {
@@ -307,14 +241,6 @@ public final class Log {
 
   }
 
-  private static String shortenName(String name, int length) {
-    if (name.length() < length) {
-      return Strings.rightPad(name, length);
-    } else {
-      return name.substring(0, length - 1) + "~";
-    }
-  }
-
   private static String padIfNecessary(String name, int length) {
     if (name.length() < length) {
       return Strings.rightPad(name, length);
@@ -333,15 +259,6 @@ public final class Log {
 
     LogLevel(Level level) {
       this.level = level;
-    }
-  }
-
-  private static class ExceptionLoggerHandler implements Thread.UncaughtExceptionHandler {
-
-    @Override
-    public void uncaughtException(Thread t, Throwable e) {
-      Log.error("Exception occurred in thread :" + t.getName(), e);
-      e.printStackTrace();
     }
   }
 
