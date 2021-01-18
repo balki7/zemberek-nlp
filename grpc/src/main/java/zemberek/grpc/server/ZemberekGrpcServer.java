@@ -4,6 +4,8 @@ import io.grpc.Server;
 import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder;
 import zemberek.core.logging.Log;
 
+import java.nio.file.Paths;
+
 public class ZemberekGrpcServer {
 
   public static final int DEFAULT_PORT = 6789;
@@ -14,14 +16,6 @@ public class ZemberekGrpcServer {
   public ZemberekGrpcServer(int port, ZemberekGrpcConfiguration configuration) {
     this.port = port;
     context = new ZemberekContext(configuration);
-  }
-
-  public int getPort() {
-    return port;
-  }
-
-  public ZemberekContext getContext() {
-    return context;
   }
 
   public void start() throws Exception {
@@ -37,7 +31,7 @@ public class ZemberekGrpcServer {
   }
 
   public static void main(String[] args) throws Exception {
-    new ZemberekGrpcServer(DEFAULT_PORT, null).start();
+    new ZemberekGrpcServer(DEFAULT_PORT, new ZemberekGrpcConfiguration(Paths.get("data", "lm"), Paths.get("data", "normalization"))).start();
   }
 
 }
