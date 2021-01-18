@@ -206,7 +206,7 @@ public final class Log {
     record.setSourceClassName(className);
     record.setSourceMethodName(caller.getMethodName());
     record.setThrown(thrown);
-    //record.setParameters(params);
+    record.setParameters(params);
     logger.log(record);
     Log.setLevel(temp);
 

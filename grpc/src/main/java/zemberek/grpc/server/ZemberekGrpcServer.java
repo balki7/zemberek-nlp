@@ -33,7 +33,9 @@ public class ZemberekGrpcServer {
 
   public static void main(String[] args) throws Exception {
     Path data = Paths.get("data");
-    new ZemberekGrpcServer(DEFAULT_PORT, new ZemberekGrpcConfiguration(Paths.get(data.toString(), "lm"), Paths.get(data.toString(), "normalization"))).start();
+    Path lmPath = Paths.get(data.toString(), "lm", "lm.2gram.slm");
+    Path normalizationPath = Paths.get(data.toString(), "normalization");
+    new ZemberekGrpcServer(DEFAULT_PORT, new ZemberekGrpcConfiguration(lmPath, normalizationPath)).start();
   }
 
 }
