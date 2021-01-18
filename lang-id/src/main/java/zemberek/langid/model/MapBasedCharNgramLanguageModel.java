@@ -126,25 +126,6 @@ public class MapBasedCharNgramLanguageModel extends BaseCharNgramModel implement
     return id;
   }
 
-  public void saveCustom(File f) throws IOException {
-    DataOutputStream dos = null;
-    try {
-      dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(f)));
-      dos.writeInt(order);
-      dos.writeUTF(id);
-      for (int i = 1; i < gramLogProbs.length; i++) {
-        Map<String, Double> probs = gramLogProbs[i].values;
-        dos.writeInt(probs.size());
-        for (String key : probs.keySet()) {
-          dos.writeUTF(key);
-          dos.writeFloat(probs.get(key).floatValue());
-        }
-      }
-    } finally {
-      Closeables.close(dos, true);
-    }
-  }
-
   public void dump() {
     System.out.println("Model ID=" + id + " Order=" + order);
     for (int i = 1; i < gramLogProbs.length; i++) {

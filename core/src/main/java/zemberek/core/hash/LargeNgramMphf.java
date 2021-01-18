@@ -251,10 +251,16 @@ public class LargeNgramMphf implements Mphf {
 
     public Splitter(File gramFile, File tmpdir, int pageBit) throws IOException {
       this.gramFile = gramFile;
-      RandomAccessFile raf = new RandomAccessFile(gramFile, "r");
-      this.order = raf.readInt();
-      this.gramCount = raf.readInt();
-      raf.close();
+      RandomAccessFile raf = null;
+      try{
+        raf = new RandomAccessFile(gramFile, "r");
+        this.order = raf.readInt();
+        this.gramCount = raf.readInt();
+      } finally{
+        if(raf != null){
+          raf.close();
+        }
+      }
       this.tmpDir = tmpdir;
       this.pageBit = pageBit;
 
@@ -308,31 +314,39 @@ public class LargeNgramMphf implements Mphf {
       }
 
       byte[] buffer = new byte[(1 << pageBit) * 4 * order];
-      RandomAccessFile raf = new RandomAccessFile(gramFile, "r");
-      raf.skipBytes(8);
-      int actual;
-      while ((actual = raf.read(buffer)) > 0) {
-        if (actual % (order * 4) != 0) {
-          throw new IllegalStateException("Cannot read order*4 aligned bytes from:" + gramFile);
-        }
+      RandomAccessFile raf = null;
+      try {
+        raf = new RandomAccessFile(gramFile, "r");
+        raf.skipBytes(8);
+        int actual;
+        while ((actual = raf.read(buffer)) > 0) {
+          if (actual % (order * 4) != 0) {
+            throw new IllegalStateException("Cannot read order*4 aligned bytes from:" + gramFile);
+          }
 
-        int[] gramIds = new int[order];
-        int p = 0;
-        int maxBitMask = (1 << maxBit) - 1;
-        for (int i = 0; i < actual; i += 4) {
-          gramIds[p++] =
-              (buffer[i] & 0xff) << 24 | (buffer[i + 1] & 0xff) << 16 | (buffer[i + 2] & 0xff) << 8
-                  | (buffer[i + 3] & 0xff);
-          if (p == order) {
-            int hash = MultiLevelMphf.hash(gramIds, -1) & maxBitMask;
-            int segmentId = hash >>> pageShift;
-            fileKeyWriters[segmentId].write(gramIds);
-            counts[segmentId]++;
-            p = 0;
+          int[] gramIds = new int[order];
+          int p = 0;
+          int maxBitMask = (1 << maxBit) - 1;
+          for (int i = 0; i < actual; i += 4) {
+            gramIds[p++] =
+                    (buffer[i] & 0xff) << 24 | (buffer[i + 1] & 0xff) << 16 | (buffer[i + 2] & 0xff) << 8
+                            | (buffer[i + 3] & 0xff);
+            if (p == order) {
+              int hash = MultiLevelMphf.hash(gramIds, -1) & maxBitMask;
+              int segmentId = hash >>> pageShift;
+              fileKeyWriters[segmentId].write(gramIds);
+              counts[segmentId]++;
+              p = 0;
+            }
           }
         }
       }
-      raf.close();
+      finally{
+        if(raf != null){
+          raf.close();
+        }
+      }
+
       int i = 0;
       for (FileKeyWriter writer : fileKeyWriters) {
         writer.close();

@@ -14,30 +14,36 @@ public class InMemoryBigByteArray {
   byte[][] data;
 
   public InMemoryBigByteArray(File file) throws IOException {
-    RandomAccessFile raf = new RandomAccessFile(file, "r");
-    count = raf.readInt();
-    blockSize = raf.readInt();
-    int pageLength = getPowerOf2(MAX_BUF / blockSize, MAX_BUF / blockSize);
-    pageShift = 32 - Integer.numberOfLeadingZeros(pageLength - 1);
-    indexMask = (1 << pageShift - 1) - 1;
-    long l = 0;
-    int pageCounter = 0;
-    while (l < count * blockSize) {
-      pageCounter++;
-      l += (pageLength * blockSize);
-    }
-    data = new byte[pageCounter][];
-    int total = 0;
-    for (int i = 0; i < pageCounter; i++) {
-      if (i < pageCounter - 1) {
-        data[i] = new byte[pageLength * blockSize];
-        total += pageLength * blockSize;
-      } else {
-        data[i] = new byte[count * blockSize - total];
+    RandomAccessFile raf = null;
+    try {
+      raf = new RandomAccessFile(file, "r");
+      count = raf.readInt();
+      blockSize = raf.readInt();
+      int pageLength = getPowerOf2(MAX_BUF / blockSize, MAX_BUF / blockSize);
+      pageShift = 32 - Integer.numberOfLeadingZeros(pageLength - 1);
+      indexMask = (1 << pageShift - 1) - 1;
+      long l = 0;
+      int pageCounter = 0;
+      while (l < count * blockSize) {
+        pageCounter++;
+        l += (pageLength * blockSize);
       }
-      raf.readFully(data[i]);
+      data = new byte[pageCounter][];
+      int total = 0;
+      for (int i = 0; i < pageCounter; i++) {
+        if (i < pageCounter - 1) {
+          data[i] = new byte[pageLength * blockSize];
+          total += pageLength * blockSize;
+        } else {
+          data[i] = new byte[count * blockSize - total];
+        }
+        raf.readFully(data[i]);
+      }
+    } finally {
+      if(raf != null){
+        raf.close();
+      }
     }
-    raf.close();
   }
 
   int getPowerOf2(int k, int limit) {

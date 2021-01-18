@@ -80,21 +80,6 @@ public class MultiFileUncompressedLm {
     return dir;
   }
 
-  public int getRankSize(File f) throws IOException {
-    DataInputStream dis = new DataInputStream(new FileInputStream(f));
-    int count = dis.readInt();
-    dis.close();
-    return count;
-  }
-
-  public int getRankBlockSize(File f) throws IOException {
-    DataInputStream dis = new DataInputStream(new FileInputStream(f));
-    dis.readInt();
-    int blockSize = dis.readInt();
-    dis.close();
-    return blockSize;
-  }
-
   public File getGramFile(int n) {
     return new File(dir, n + GRAM_IDS_FILE_SUFFIX);
   }

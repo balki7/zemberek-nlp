@@ -55,8 +55,7 @@ public class UncompressedToSmoothLmConverter {
 
     order = lm.order;
 
-    DataOutputStream dos = new DataOutputStream(
-        new BufferedOutputStream(new FileOutputStream(lmFile)));
+    DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(lmFile)));
 
     // generate Minimal Perfect Hash functions for 2,3...n grams and save them as separate files.
 

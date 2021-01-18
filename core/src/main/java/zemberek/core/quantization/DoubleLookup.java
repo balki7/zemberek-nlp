@@ -65,8 +65,7 @@ public class DoubleLookup {
   }
 
   public void save(File file) throws IOException {
-    DataOutputStream dos = new DataOutputStream(
-        new BufferedOutputStream(new FileOutputStream(file), 1000000));
+    DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(file), 1000000));
     dos.writeInt(range);
     for (double v : data) {
       dos.writeDouble(v);

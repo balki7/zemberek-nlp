@@ -11,17 +11,23 @@ public class ByteGramProvider implements IntHashKeyProvider {
   int ngramCount;
 
   public ByteGramProvider(File file) throws IOException {
-    RandomAccessFile raf = new RandomAccessFile(file, "r");
-    this.order = raf.readInt();
-    this.ngramCount = raf.readInt();
-    final int byteAmount = order * ngramCount * 4;
-    data = new byte[byteAmount];
-    int actual = raf.read(data);
-    if (actual != byteAmount) {
-      throw new IllegalStateException(
-          "File suppose to have " + byteAmount + " bytes for " + ngramCount + " ngrams");
+    RandomAccessFile raf = null;
+    try{
+      raf = new RandomAccessFile(file, "r");
+      this.order = raf.readInt();
+      this.ngramCount = raf.readInt();
+      final int byteAmount = order * ngramCount * 4;
+      data = new byte[byteAmount];
+      int actual = raf.read(data);
+      if (actual != byteAmount) {
+        throw new IllegalStateException(
+                "File suppose to have " + byteAmount + " bytes for " + ngramCount + " ngrams");
+      }
+    } finally {
+      if(raf != null){
+        raf.close();
+      }
     }
-    raf.close();
   }
 
   public ByteGramProvider(byte[] data, int order, int ngramCount) {

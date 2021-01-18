@@ -24,39 +24,6 @@ public class ProcessRunner {
     process.waitFor();
   }
 
-  public void pipe(InputStream is, OutputStream os, ProcessBuilder... builders)
-      throws IOException, InterruptedException {
-    int i = 0;
-    File tempin;
-    File tempout = File.createTempFile("pipe", "txt");
-    OutputStream tos;
-    for (ProcessBuilder builder : builders) {
-      if (i == 0) {
-      } else {
-        tempin = tempout;
-        is = new FileInputStream(tempin);
-      }
-      if (i == builders.length - 1) {
-        if (os == null) {
-          tos = System.out;
-        } else {
-          tos = os;
-        }
-      } else {
-        tempout = File.createTempFile("pipe", "txt");
-        tos = new FileOutputStream(tempout);
-      }
-      Process process = builder.redirectErrorStream(true).directory(processRoot).start();
-      new AsyncPipe(process.getErrorStream(), System.err, false).start();
-      new AsyncPipe(process.getInputStream(), tos).start();
-      if (is != null) {
-        new AsyncPipe(is, process.getOutputStream()).start();
-      }
-      i++;
-      process.waitFor();
-    }
-  }
-
   public void execute(ProcessBuilder pb, InputStream is, OutputStream os)
       throws IOException, InterruptedException {
     System.out.println(Joiner.on(" ").join(pb.command()));
@@ -86,15 +53,6 @@ public class ProcessRunner {
     new AsyncPipe(process.getInputStream(), os).start();
     new AsyncPipe(process.getErrorStream(), System.err, false).start();
     process.waitFor();
-  }
-
-  public void execute(ProcessBuilder pb, File inFile, File outFile)
-      throws IOException, InterruptedException {
-    execute(pb, new FileInputStream(inFile), new FileOutputStream(outFile));
-  }
-
-  public void execute(ProcessBuilder pb, File outFile) throws IOException, InterruptedException {
-    execute(pb, new FileOutputStream(outFile));
   }
 
   /**

@@ -34,7 +34,9 @@ public class StemTransitionsTrieBased extends StemTransitionsBase implements Ste
     try {
       return stemTransitionTrie.getAll();
     } finally {
-      lock.readLock().unlock();
+      if(null != lock  && null != lock.readLock()) {
+        lock.readLock().unlock();
+      }
     }
   }
 
@@ -47,7 +49,9 @@ public class StemTransitionsTrieBased extends StemTransitionsBase implements Ste
     try {
       return stemTransitionTrie.getPrefixMatchingItems(stem);
     } finally {
-      lock.readLock().unlock();
+      if(null != lock  && null != lock.readLock()) {
+        lock.readLock().unlock();
+      }
     }
   }
 
@@ -67,7 +71,9 @@ public class StemTransitionsTrieBased extends StemTransitionsBase implements Ste
     } catch (Exception e) {
       Log.warn("Cannot generate stem transition for %s with reason %s", item, e.getMessage());
     } finally {
-      lock.writeLock().unlock();
+      if(null != lock  && null != lock.writeLock()) {
+        lock.writeLock().unlock();
+      }
     }
   }
 
@@ -83,7 +89,9 @@ public class StemTransitionsTrieBased extends StemTransitionsBase implements Ste
         differentStemItems.putAll(item, transitions);
       }
     } finally {
-      lock.writeLock().unlock();
+      if(null != lock  && null != lock.writeLock()) {
+        lock.writeLock().unlock();
+      }
     }
   }
 
@@ -100,7 +108,9 @@ public class StemTransitionsTrieBased extends StemTransitionsBase implements Ste
     } catch (Exception e) {
       Log.warn("Cannot remove %s ", e.getMessage());
     } finally {
-      lock.writeLock().unlock();
+      if(null != lock  && null != lock.writeLock()) {
+        lock.writeLock().unlock();
+      }
     }
   }
 

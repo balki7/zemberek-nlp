@@ -108,9 +108,14 @@ public class DictionarySerializer {
     Dictionary dictionary = builder.build();
     System.out.println("Total size of serialized dictionary: " + dictionary.getSerializedSize());
     Path f = Files.createTempFile("lexicon", ".bin");
-    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(f.toFile()));
-    bos.write(dictionary.toByteArray());
-    bos.close();
+    BufferedOutputStream bos = null;
+    try {
+      bos = new BufferedOutputStream(new FileOutputStream(f.toFile()));
+      bos.write(dictionary.toByteArray());
+    } finally {
+      bos.close();
+    }
+
 
     long start = System.currentTimeMillis();
     byte[] serialized = Files.readAllBytes(f);
@@ -138,7 +143,7 @@ public class DictionarySerializer {
         .setIndex(item.index)
         .setPrimaryPos(primaryPosConverter
             .convertTo(item.primaryPos, LexiconProto.PrimaryPos.PrimaryPos_Unknown));
-    String lowercaseLemma = item.lemma.toLowerCase();
+    String lowercaseLemma = item.lemma.toLowerCase(new Locale("tr", "TR"));
     if (item.root != null && !item.root.equals(lowercaseLemma)) {
       builder.setRoot(item.root);
     }
