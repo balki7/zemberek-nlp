@@ -53,14 +53,6 @@ public class Weights implements WeightLookup, Iterable<String> {
     return new Weights(data);
   }
 
-  public void saveAsText(Path file) throws IOException {
-    try (PrintWriter pw = new PrintWriter(file.toFile(), "utf-8")) {
-      for (String s : data.getKeyList()) {
-        pw.println(String.format(Locale.ENGLISH, "%.3f %s", data.get(s), s));
-      }
-    }
-  }
-
   public Weights copy() {
     return new Weights(data.copy());
   }
