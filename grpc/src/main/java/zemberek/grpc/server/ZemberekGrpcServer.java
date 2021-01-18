@@ -4,6 +4,7 @@ import io.grpc.Server;
 import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder;
 import zemberek.core.logging.Log;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ZemberekGrpcServer {
@@ -31,7 +32,8 @@ public class ZemberekGrpcServer {
   }
 
   public static void main(String[] args) throws Exception {
-    new ZemberekGrpcServer(DEFAULT_PORT, new ZemberekGrpcConfiguration(Paths.get("data", "lm"), Paths.get("data", "normalization"))).start();
+    Path data = Paths.get("data");
+    new ZemberekGrpcServer(DEFAULT_PORT, new ZemberekGrpcConfiguration(Paths.get(data.toString(), "lm"), Paths.get(data.toString(), "normalization"))).start();
   }
 
 }
