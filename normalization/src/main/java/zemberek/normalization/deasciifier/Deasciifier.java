@@ -1,12 +1,6 @@
 package zemberek.normalization.deasciifier;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Scanner;
@@ -176,18 +170,6 @@ public class Deasciifier {
     return s.toString();
   }
 
-  public static void savePatternTable(String filename) {
-
-    try {
-      FileOutputStream f = new FileOutputStream(filename);
-      ObjectOutputStream out = new ObjectOutputStream(f);
-      out.writeObject(turkishPatternTable);
-      out.close();
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
   public void setAsciiString(String asciiString) {
     this.asciiString = asciiString;
     this.turkishString = asciiString;
@@ -349,20 +331,24 @@ public class Deasciifier {
     return turkishGetContext(turkishContextSize, 0);
   }
 
-  private void loadPatternTable() {
+  private void loadPatternTable(){
     if (turkishPatternTable != null) {
       return;
     }
     turkishPatternTable = new HashMap<>();
     InputStream is = this.getClass().getResourceAsStream("/patterns/turkishPatternTable");
-
+    ObjectInputStream ois = null;
     try {
-      ObjectInputStream ois = new ObjectInputStream(is);
-
+      ois = new ObjectInputStream(is);
       turkishPatternTable = (HashMap) ois.readObject();
-      ois.close();
     } catch (Exception e) {
-      e.printStackTrace();
+
+    } finally {
+      try {
+        ois.close();
+      } catch (IOException e) {
+
+      }
     }
   }
 

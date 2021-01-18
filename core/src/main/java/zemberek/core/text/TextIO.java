@@ -51,15 +51,6 @@ public class TextIO {
         .collect(Collectors.toList());
   }
 
-  public static List<String> loadLinesFromCompressed(Path path) throws IOException {
-    try (InputStream gzipStream = new GZIPInputStream(new FileInputStream(path.toFile()))) {
-      BufferedReader reader = new BufferedReader(
-          new InputStreamReader(gzipStream, StandardCharsets.UTF_8));
-      return reader.lines()
-          .filter(s -> s.trim().length() > 0)
-          .collect(Collectors.toCollection(ArrayList::new));
-    }
-  }
 
   public static long charCount(Path path, Charset charset) throws IOException {
     BufferedReader reader = Files.newBufferedReader(path, charset);

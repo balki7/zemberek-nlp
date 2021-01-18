@@ -65,7 +65,9 @@ public class StemTransitionsMapBased extends StemTransitionsBase implements Stem
         }
       }
     } finally {
-      lock.writeLock().unlock();
+      if(null != lock  && null != lock.writeLock()) {
+        lock.writeLock().unlock();
+      }
     }
   }
 
@@ -125,7 +127,9 @@ public class StemTransitionsMapBased extends StemTransitionsBase implements Stem
       }
       return result;
     } finally {
-      lock.readLock().unlock();
+      if(null != lock  && null != lock.readLock()) {
+        lock.readLock().unlock();
+      }
     }
   }
 
@@ -140,7 +144,9 @@ public class StemTransitionsMapBased extends StemTransitionsBase implements Stem
         return Collections.emptyList();
       }
     } finally {
-      lock.readLock().unlock();
+      if(null != lock  && null != lock.readLock()) {
+        lock.readLock().unlock();
+      }
     }
   }
 
@@ -161,7 +167,9 @@ public class StemTransitionsMapBased extends StemTransitionsBase implements Stem
       }
       return matches;
     } finally {
-      lock.readLock().unlock();
+      if(null != lock  && null != lock.readLock()) {
+        lock.readLock().unlock();
+      }
     }
   }
 
@@ -176,7 +184,9 @@ public class StemTransitionsMapBased extends StemTransitionsBase implements Stem
         return transitions.stream().filter(s -> s.item.equals(item)).collect(Collectors.toList());
       }
     } finally {
-      lock.readLock().unlock();
+      if(null != lock  && null != lock.readLock()) {
+        lock.readLock().unlock();
+      }
     }
   }
 
@@ -194,7 +204,9 @@ public class StemTransitionsMapBased extends StemTransitionsBase implements Stem
     } catch (Exception e) {
       Log.warn("Cannot generate stem transition for %s with reason %s", item, e.getMessage());
     } finally {
-      lock.writeLock().unlock();
+      if(null != lock  && null != lock.writeLock()) {
+        lock.writeLock().unlock();
+      }
     }
   }
 
@@ -211,7 +223,9 @@ public class StemTransitionsMapBased extends StemTransitionsBase implements Stem
     } catch (Exception e) {
       Log.warn("Cannot remove %s ", item, e.getMessage());
     } finally {
-      lock.writeLock().unlock();
+      if(null != lock  && null != lock.writeLock()) {
+        lock.writeLock().unlock();
+      }
     }
   }
 
