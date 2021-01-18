@@ -138,7 +138,7 @@ public class DictionarySerializer {
         .setIndex(item.index)
         .setPrimaryPos(primaryPosConverter
             .convertTo(item.primaryPos, LexiconProto.PrimaryPos.PrimaryPos_Unknown));
-    String lowercaseLemma = item.lemma.toLowerCase();
+    String lowercaseLemma = item.lemma.toLowerCase(Locale.ENGLISH);
     if (item.root != null && !item.root.equals(lowercaseLemma)) {
       builder.setRoot(item.root);
     }
