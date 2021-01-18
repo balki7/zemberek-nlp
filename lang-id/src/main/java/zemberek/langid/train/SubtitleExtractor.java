@@ -30,7 +30,10 @@ public class SubtitleExtractor {
   public List<String> ExtractFromStream(InputStream is, int minLength)
       throws XMLStreamException {
     List<String> lines = Lists.newArrayList();
-    XMLStreamReader staxXmlReader = XMLInputFactory.newInstance().createXMLStreamReader(is);
+    XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
+    xmlInputFactory.setProperty("javax.xml.stream.isSupportingExternalEntities", false);
+    XMLStreamReader staxXmlReader = xmlInputFactory.createXMLStreamReader(is);
+
     List<String> line = Lists.newArrayList();
     for (int event = staxXmlReader.next(); event != XMLStreamConstants.END_DOCUMENT;
         event = staxXmlReader.next()) {
