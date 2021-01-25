@@ -37,7 +37,6 @@ public class MorphologyServiceImpl extends MorphologyServiceImplBase {
       StreamObserver<SentenceAnalysisProto> responseObserver) {
     String sentence = request.getInput();
     SentenceAnalysis a = morphology.analyzeAndDisambiguate(sentence);
-    Log.info("Sentence = %s", sentence);
     responseObserver.onNext(toSentenceAnalysis(a, request.getContainAllAnalyses()));
     responseObserver.onCompleted();
   }

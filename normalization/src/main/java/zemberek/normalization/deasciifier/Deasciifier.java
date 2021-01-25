@@ -345,11 +345,12 @@ public class Deasciifier {
 
     } finally {
       try {
-        ois.close();
+        if (ois != null) {
+          ois.close();
+        }
       } catch (IOException e) {
 
       }
     }
   }
-
 }
