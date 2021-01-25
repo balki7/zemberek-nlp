@@ -196,14 +196,13 @@ public class LmVocabulary {
     List<String> cleanVocab = new ArrayList<>();
     for (String word : inputVocabulary) {
       if (vocabularyIndexMap.containsKey(word)) {
-        Log.warn("Language model vocabulary has duplicate item: " + word);
+        Log.warn("Language model vocabulary has duplicate item");
         continue;
       }
       if (word.equalsIgnoreCase(DEFAULT_UNKNOWN_WORD)) {
         if (unknownWordIndex != -1) {
           Log.warn(
-              "Unknown word was already defined as %s but another matching token exist in the input vocabulary: %s",
-              unknownWord, word);
+              "Unknown word was already defined as %s but another matching token exist in the input vocabulary");
         } else {
           unknownWord = word;
           unknownWordIndex = indexCounter;
@@ -211,8 +210,7 @@ public class LmVocabulary {
       } else if (word.equalsIgnoreCase(DEFAULT_SENTENCE_BEGIN_MARKER)) {
         if (sentenceStartIndex != -1) {
           Log.warn(
-              "Sentence start index was already defined as %s but another matching token exist in the input vocabulary: %s",
-              sentenceStart, word);
+              "Sentence start index was already defined as %s but another matching token exist in the input vocabulary");
         } else {
           sentenceStart = word;
           sentenceStartIndex = indexCounter;
@@ -220,8 +218,7 @@ public class LmVocabulary {
       } else if (word.equalsIgnoreCase(DEFAULT_SENTENCE_END_MARKER)) {
         if (sentenceEndIndex != -1) {
           Log.warn(
-              "Sentence end index was already defined as %s but another matching token exist in the input vocabulary: %s",
-              sentenceEnd, word);
+              "Sentence end index was already defined as %s but another matching token exist in the input vocabulary");
         } else {
           sentenceEnd = word;
           sentenceEndIndex = indexCounter;
@@ -235,8 +232,7 @@ public class LmVocabulary {
       unknownWord = DEFAULT_UNKNOWN_WORD;
       cleanVocab.add(unknownWord);
       vocabularyIndexMap.put(unknownWord, indexCounter++);
-      Log.debug("Necessary special token " + unknownWord
-          + " was not found in the vocabulary, it is added explicitly");
+      Log.debug("Necessary special token was not found in the vocabulary, it is added explicitly");
     }
     unknownWordIndex = vocabularyIndexMap.get(unknownWord);
     if (sentenceStartIndex == -1) {
