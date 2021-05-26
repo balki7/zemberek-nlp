@@ -1,7 +1,11 @@
 package zemberek.grpc.server;
 
 import io.grpc.Server;
-import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder;
+import io.netty.handler.ssl.SslContext;
+import io.grpc.netty.GrpcSslContexts;
+import io.grpc.netty.NettyServerBuilder;
+import nl.altindag.ssl.SSLFactory;
+import nl.altindag.ssl.util.NettySslUtils;
 import zemberek.core.logging.Log;
 
 import java.nio.file.Path;
@@ -20,11 +24,16 @@ public class ZemberekGrpcServer {
   }
 
   public void start() throws Exception {
+    SSLFactory sslFactory = SSLFactory.builder().withIdentityMaterial("server/identity.jks", "secret".toCharArray())
+            .withTrustMaterial("server/truststore.jks", "secret".toCharArray())
+            .withNeedClientAuthentication().build();
+    SslContext sslContext = GrpcSslContexts.configure(NettySslUtils.forServer(sslFactory)).build();
     Server server = NettyServerBuilder.forPort(port)
         .addService(new LanguageIdServiceImpl())
         .addService(new PreprocessingServiceImpl())
         .addService(new NormalizationServiceImpl(context))
         .addService(new MorphologyServiceImpl(context))
+            .sslContext(sslContext)
         .build()
         .start();
     Log.info("Zemberek grpc server started at port: " + port);
