@@ -24,8 +24,8 @@ public class ZemberekGrpcServer {
   }
 
   public void start() throws Exception {
-    SSLFactory sslFactory = SSLFactory.builder().withIdentityMaterial("server/identity.jks", "secret".toCharArray())
-            .withTrustMaterial("server/truststore.jks", "secret".toCharArray())
+    SSLFactory sslFactory = SSLFactory.builder().withIdentityMaterial("server/keystore.jks", "dragon".toCharArray())
+            .withTrustMaterial("server/truststore.jks", "dragon".toCharArray())
             .withNeedClientAuthentication().build();
     SslContext sslContext = GrpcSslContexts.configure(NettySslUtils.forServer(sslFactory)).build();
     Server server = NettyServerBuilder.forPort(port)
