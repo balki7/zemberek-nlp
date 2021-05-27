@@ -1,13 +1,13 @@
 package zemberek.grpc.server;
 
 import io.grpc.Server;
+import io.netty.handler.ssl.ClientAuth;
 import io.netty.handler.ssl.SslContext;
 import io.grpc.netty.GrpcSslContexts;
 import io.grpc.netty.NettyServerBuilder;
-import nl.altindag.ssl.SSLFactory;
-import nl.altindag.ssl.util.NettySslUtils;
 import zemberek.core.logging.Log;
 
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -24,10 +24,12 @@ public class ZemberekGrpcServer {
   }
 
   public void start() throws Exception {
-    SSLFactory sslFactory = SSLFactory.builder().withIdentityMaterial("server/keystore.jks", "dragon".toCharArray())
-            .withTrustMaterial("server/truststore.jks", "dragon".toCharArray())
-            .withNeedClientAuthentication().build();
-    SslContext sslContext = GrpcSslContexts.configure(NettySslUtils.forServer(sslFactory)).build();
+    InputStream serverCertFile = getClass().getClassLoader().getResourceAsStream("server/dragon.crt.yaml");
+    InputStream serverKeyFile = getClass().getClassLoader().getResourceAsStream("server/dragon.key.yaml");
+    SslContext sslContext = GrpcSslContexts.forServer(serverCertFile, serverKeyFile)
+            .trustManager(getClass().getClassLoader().getResourceAsStream("server/dragon.crt.yaml"))
+            //.clientAuth(ClientAuth.REQUIRE)
+            .build();
     Server server = NettyServerBuilder.forPort(port)
         .addService(new LanguageIdServiceImpl())
         .addService(new PreprocessingServiceImpl())
