@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 
 public class ZemberekGrpcServer {
 
-  public static final int DEFAULT_PORT = 9005;
+  public static final int DEFAULT_PORT = 9003;
 
   private final int port;
   private ZemberekContext context;
